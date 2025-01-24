@@ -12,7 +12,11 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
-app.use(cors())
+app.use(cors({
+    origin: '*', // Vite's default dev server
+    methods: 'GET,POST,PUT,DELETE', // Allowed methods
+    credentials: true,              // Allow cookies
+}));
 app.use("/api/auth/tempLogin", loginRouter)
 
 export default app
