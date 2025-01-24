@@ -8,6 +8,9 @@ const generateOtp = () => {
 
 const sendOtp = async (email,name) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
+
+  resend.domains.verify('0af90700-4f3e-441d-ae64-cc8cfcb5ec9d');
+
     const otp = generateOtp();
     const expiry = Date.now() + 5 * 60 * 1000; 
 
@@ -15,7 +18,7 @@ const sendOtp = async (email,name) => {
 
     try {
         const { data, error } = await resend.emails.send({
-            from: "DigiSir <onboarding@resend.dev>",
+            from: "DigiSir <noreply@hellodigisir.in>",
             to: [`${email}`],
             subject: "Verification OTP",
             html: OTP_EMAIL_HTML(name,otp),
