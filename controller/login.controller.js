@@ -90,6 +90,10 @@ const loginUser = AsyncHandler(async (req, res) => {
         }
         const user = await loginSchema.findOne({email})
 
+        if (!user) {
+          return res.status(300).json({message:"user not found"})
+        }
+
         const verifyPassword = await bcrytp.compare(password,user.password);
 
 

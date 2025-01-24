@@ -1,0 +1,9 @@
+API DOCUMENTATION 
+
+1) https://api.test.hellodigisir.in/api/auth/tempLogin/register  ---> POST REQUEST ---> {name,email,password}
+
+2) https://api.test.hellodigisir.in/api/auth/tempLogin/verify ---> POST REQUEST ---> {userotp}
+
+3) https://api.test.hellodigisir.in/api/auth/tempLogin/resendotp ---> POST REQUEST ---> {name,email}
+
+4) https://api.test.hellodigisir.in/api/auth/tempLogin/login ---> POST REQUEST ---> {email,password}
