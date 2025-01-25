@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import Login from "../models/login.model.js";
 
 export const verifyJwt = async (req, res, next) => {
   try {
@@ -10,13 +11,13 @@ export const verifyJwt = async (req, res, next) => {
       res.status(300).json({ message: "unauthorized access" });
     }
 
-    const userId = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!userId) {
       res.status(300).json({ message: "Invalid token detail" });
     }
 
-    const user = await User.findById(userId.id)
+    const user = await Login.findById(userId)
 
     req.user = user;
 

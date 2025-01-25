@@ -76,7 +76,14 @@ const InstituteAdminSchema = new mongoose.Schema({
             key_value: {type: String},
             created_at: { type: Date, default: Date.now }
         }
-    ]
+    ],
+    aadharCardNumber: {
+      type: String,
+      required: true
+    },
+    avatar: {
+      type: String,
+    },
   });
 
   const InstituteAdmin = mongoose.model('InstituteAdmin', InstituteAdminSchema);
