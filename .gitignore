@@ -80,3 +80,4 @@ Thumbs.db
 # IDE files
 .idea/
 *.sublime-workspace
+.vercel
