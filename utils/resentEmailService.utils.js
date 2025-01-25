@@ -24,7 +24,7 @@ const sendOtp = async (email,name) => {
             html: OTP_EMAIL_HTML(name,otp),
           });
 
-          return {data,error,token}
+          return {data,error,token,otp}
     } catch (error) {
         return { success: false, message: 'Failed to send OTP.' };
     }
