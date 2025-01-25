@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
 import loginRouter from "./router/login.routes.js"
+import paymentRoutes from './router/payment.route.js'
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ app.use(cors({
     methods: 'GET,POST,PUT,DELETE', // Allowed methods
     credentials: true,              // Allow cookies
 }));
-app.use("/api/auth/tempLogin", loginRouter)
+app.use("/api/auth/tempLogin", loginRouter);
+app.use("/api/payment", paymentRoutes);
 
 export default app
