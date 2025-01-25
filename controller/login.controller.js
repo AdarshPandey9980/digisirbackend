@@ -43,19 +43,6 @@ const registerUser = AsyncHandler(async (req, res) => {
         .status(200)
         .json({ message: "User created but faild to send OTP", error: error });
     }
-
-    // if (error === null) {
-    //   res.cookie("userId", user._id, {  httpOnly: true });
-    //   res.cookie("OTPtoken", token, { maxAge: 300000, httpOnly: true });
-    //   return res.status(200).json({
-    //     message: "User created and OTP Send successfully",
-    //     data: data,
-    //   });
-    // } else {
-    //   return res
-    //     .status(200)
-    //     .json({ message: "User created but faild to send OTP", error: error });
-    // }
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -83,31 +70,6 @@ const verifyOpt = AsyncHandler(async (req, res) => {
       });
       return res.status(200).json({ message: "otp verifyed", ack });
     }
-
-    // const userId =
-    //   req?.cookies?.userId ||
-    //   req.header("Authorization")?.replace("Bearer", "");
-
-    // if (!userId) {
-    //   res.status(300).json({ message: "Something went wrong" });
-    // }
-
-    // if (!userotp) {
-    //   return res.status(400).json({ message: "OTP is required" });
-    // }
-
-    // if (!otp) {
-    //   return res.status(400).json({ message: "OTP not send" });
-    // }
-
-    // if (userotp === otp) {
-    //   const ack = await loginSchema.findByIdAndUpdate( userId , {$set: {isVerified: true} });
-    //   res.clearCookie('userId');
-    //   res.clearCookie('OTPtoken')
-    //   return res.status(200).json({message: "otp verifyed", ack})
-    // } else {
-    //   await res.status(200).json({ message: "wrong otp pin" });
-    // }
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -131,8 +93,8 @@ const loginUser = AsyncHandler(async (req, res) => {
 
     if (verifyPassword) {
       const userToken = await generateTokenforUser(user);
-      res.cookie("userToken", userToken, { httpOnly: true });
-      return res.status(200).json({ message: "user log in successfully" });
+      res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
+      return res.status(200).json({ userToken,message: "user log in successfully" });
     } else {
       return res.status(300).json({ message: "password incorrect" });
     }
@@ -160,7 +122,37 @@ const resendOTP = AsyncHandler(async (req, res) => {
         .status(200)
         .json({ message: "User created but faild to send OTP", error: error });
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
 });
 
-export { registerUser, verifyOpt, loginUser, resendOTP };
+
+const getCurrentUser = AsyncHandler(async (req, res) => {
+  try {
+    const user = req.user;
+    return res.status(200).json({ user, message:"user fetched succeessfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
+const changeUserPassword = AsyncHandler(async (req, res) => {
+
+  try {
+    const {password} = req.body
+    if(!password) {
+        return res.status(400).json({message: "password is required"})
+    }
+    const {user} = req.user
+    const salt = await bcrytp.genSalt(10)
+    const hashedPassword = await bcrytp.hash(password, salt)
+    const ack = await loginSchema.findByIdAndUpdate(user._id, {$set: {password: hashedPassword}})
+    return res.status(200).json({ack,message:"password changed successfully"})
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+
+});
+
+export { registerUser, verifyOpt, loginUser, resendOTP,getCurrentUser,changeUserPassword };
