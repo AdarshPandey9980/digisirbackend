@@ -15,8 +15,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 app.use(cors({
-    origin: '*', // Vite's default dev server
-    methods: 'GET,POST,PUT,DELETE', // Allowed methods
+    // origin:"*",
+    origin: 'http://localhost:5173', // Vite's default dev server // Allowed methods
     credentials: true,              // Allow cookies
 }));
 app.use("/api/auth/tempLogin", loginRouter);

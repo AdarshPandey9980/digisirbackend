@@ -38,7 +38,12 @@ const registerInstituteAdmin = AsyncHandler(async (req, res) => {
   
         const avatar = await uploadOnCloud(avatarLocalPath);
   
-        if (!avatar) throw new Error("something went wrong");
+        if (!avatar) {
+            fs.unlinkSync(avatarLocalPath);
+            return res.status(400).json({ message: "avatar not uploaded" });
+        } else {
+            fs.unlinkSync(avatarLocalPath);
+        }
 
         const user = await instituteAdminSchema.create({
             institute_name,
@@ -58,7 +63,7 @@ const registerInstituteAdmin = AsyncHandler(async (req, res) => {
 
         await paymentModel.findOneAndUpdate({email},{$set:{instituteAdmin:user._id}})
 
-        fs.unlinkSync(avatarLocalPath);
+        // fs.unlinkSync(avatarLocalPath);
 
         return res.status(200).json({ack,message:"user created successfully"})
 
@@ -67,7 +72,8 @@ const registerInstituteAdmin = AsyncHandler(async (req, res) => {
     } catch (error) {
         fs.unlinkSync(avatarLocalPath);
         return res.status(500).json({ message: error.message });
-       
+    } finally {
+        // fs.unlinkSync(avatarLocalPath);
     }
 })
 

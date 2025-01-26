@@ -83,13 +83,19 @@ const loginUser = AsyncHandler(async (req, res) => {
         .status(400)
         .json({ message: "email and password both are required" });
     }
+    console.log(email, password);
+    
     const user = await loginSchema.findOne({ email });
+    console.log(user);
+    
 
     if (!user) {
       return res.status(300).json({ message: "user not found" });
     }
 
     const verifyPassword = await bcrytp.compare(password, user.password);
+    console.log(verifyPassword);
+    
 
     if (verifyPassword) {
       const userToken = await generateTokenforUser(user);

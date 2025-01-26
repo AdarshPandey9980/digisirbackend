@@ -14,12 +14,12 @@ const uploadOnCloud = async (localFilePath) => {
       resource_type: "auto",
     });
     // console.log(response);
-
+    // fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
     // console.log(error);
 
-    fs.unlinkSync(localFilePath);
+    // fs.unlinkSync(localFilePath);
     return null;
   }
 };

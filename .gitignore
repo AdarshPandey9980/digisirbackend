@@ -63,7 +63,6 @@ dist/
 
 # Temporary folders
 tmp/
-temp/
 
 # VS Code settings
 .vscode/
