@@ -8,7 +8,7 @@ router.route('/register').post(registerUser)
 router.route('/verify').post(verifyOpt)
 router.route('/login').post(loginUser)
 router.route('/resendotp').post(resendOTP)
-router.route('/getCurrentUser').post(verifyJwt,getCurrentUser)
+router.route('/getCurrentUser').get(verifyJwt,getCurrentUser)
 router.route('/changePassword').post(verifyJwt,changeUserPassword)
 
 export default router

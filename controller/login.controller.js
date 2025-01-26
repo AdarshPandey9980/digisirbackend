@@ -84,18 +84,33 @@ const loginUser = AsyncHandler(async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are both required." });
     }
+<<<<<<< HEAD
 
     // Find the user by email
     const user = await loginSchema.findOne({ email });
     console.log(user)
+=======
+    console.log(email, password);
+    
+    const user = await loginSchema.findOne({ email });
+    console.log(user);
+    
+>>>>>>> 725c5cbac1eb602f44489a5c5211f652da5437c2
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });  // Changed to 404 for user not found
     }
 
+<<<<<<< HEAD
     // Compare the password
     const verifyPassword = await bcrypt.compare(password, user.password);
     console.log(verifyPassword)
+=======
+    const verifyPassword = await bcrytp.compare(password, user.password);
+    console.log(verifyPassword);
+    
+
+>>>>>>> 725c5cbac1eb602f44489a5c5211f652da5437c2
     if (verifyPassword) {
       // Generate a token for the user
       const userToken = await generateTokenforUser(user);
