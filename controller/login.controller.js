@@ -98,9 +98,9 @@ const loginUser = AsyncHandler(async (req, res) => {
     
 
     if (verifyPassword) {
-      const userToken = await generateTokenforUser(user);
-      res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
-      return res.status(200).json({ userToken,message: "user log in successfully" });
+      // const userToken = await generateTokenforUser(user);
+      //res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
+      return res.status(200).json({ userId: user._id,message: "user log in successfully" });
     } else {
       return res.status(300).json({ message: "password incorrect" });
     }
@@ -136,7 +136,11 @@ const resendOTP = AsyncHandler(async (req, res) => {
 
 const getCurrentUser = AsyncHandler(async (req, res) => {
   try {
-    const user = req.user;
+   const {userId} = req.body
+   if(!userId) {
+    return res.status(400).json({message:"user id is required"})
+   }
+   const user = await loginSchema.findById(userId)
     return res.status(200).json({ user, message:"user fetched succeessfully" });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -150,10 +154,13 @@ const changeUserPassword = AsyncHandler(async (req, res) => {
     if(!password) {
         return res.status(400).json({message: "password is required"})
     }
-    const {user} = req.user
+    const {userId} = req.body
+    if(!userId) {
+        return res.status(400).json({message:"user id is required"})
+    }
     const salt = await bcrytp.genSalt(10)
     const hashedPassword = await bcrytp.hash(password, salt)
-    const ack = await loginSchema.findByIdAndUpdate(user._id, {$set: {password: hashedPassword}})
+    const ack = await loginSchema.findByIdAndUpdate(userId, {$set: {password: hashedPassword}})
     return res.status(200).json({ack,message:"password changed successfully"})
   } catch (error) {
     return res.status(500).json({ message: error });

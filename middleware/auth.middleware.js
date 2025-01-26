@@ -4,7 +4,7 @@ import Login from "../models/login.model.js";
 export const verifyJwt = async (req, res, next) => {
   try {
     const token =
-      req?.cookies?.userToken || req.header("Authorization")?.replace("Bearer", "");
+      req?.cookies?.userId || req.header("Authorization")?.replace("Bearer", "");
 
     // console.log("token",token)
 
@@ -15,15 +15,15 @@ export const verifyJwt = async (req, res, next) => {
     // console.log(token);
     
 
-    const userId = jwt.verify(token, process.env.JWT_SECRET);
+    // const userId = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(userId);
     
 
-    if (!userId) {
-     return res.status(300).json({ message: "Invalid token detail" });
-    }
+    // if (!userId) {
+    //  return res.status(300).json({ message: "Invalid token detail" });
+    // }
 
-    const user = await Login.findById(userId.id).select("-password -isVerified");
+    const user = await Login.findById(token).select("-password -isVerified");
 
     if (!user) {
       return res.status(300).json({ message: "user not found" });
