@@ -4,7 +4,7 @@ import {
   sendOtp,
   generateTokenforUser,
 } from "../utils/index.utils.js";
-import bcrytp from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 const registerUser = AsyncHandler(async (req, res) => {
   try {
@@ -19,8 +19,8 @@ const registerUser = AsyncHandler(async (req, res) => {
       return res.status(400).json({ message: "user already exist" });
     }
 
-    const salt = await bcrytp.genSalt(10);
-    const hashedPassword = await bcrytp.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await loginSchema.create({
       name,
@@ -30,7 +30,7 @@ const registerUser = AsyncHandler(async (req, res) => {
 
     const { data, error, token, otp } = await sendOtp(email, name);
 
-    const encryptedOtp = await bcrytp.hash(otp, salt);
+    const encryptedOtp = await bcrypt.hash(otp, salt);
 
     if (error === null) {
       return res.status(200).json({
@@ -53,7 +53,7 @@ const verifyOpt = AsyncHandler(async (req, res) => {
     const { userotp, encryptedOtp } = req.body;
     console.log(userotp, encryptedOtp);
 
-    const result = await bcrytp.compare(userotp, encryptedOtp);
+    const result = await bcrypt.compare(userotp, encryptedOtp);
 
     console.log(result);
 
@@ -78,54 +78,85 @@ const verifyOpt = AsyncHandler(async (req, res) => {
 const loginUser = AsyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email,password);
+    
+    // Check if email and password are provided
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "email and password both are required" });
+      return res.status(400).json({ message: "Email and password are both required." });
     }
+
+    // Find the user by email
     const user = await loginSchema.findOne({ email });
+    console.log(user)
 
     if (!user) {
-      return res.status(300).json({ message: "user not found" });
+      return res.status(404).json({ message: "User not found." });  // Changed to 404 for user not found
     }
 
-    const verifyPassword = await bcrytp.compare(password, user.password);
-
+    // Compare the password
+    const verifyPassword = await bcrypt.compare(password, user.password);
+    console.log(verifyPassword)
     if (verifyPassword) {
+      // Generate a token for the user
       const userToken = await generateTokenforUser(user);
-      res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
-      return res.status(200).json({ userToken,message: "user log in successfully" });
+      console.log(userToken)
+
+      // Set the token in a cookie, making sure it's secure only in production
+      res.cookie("userToken", userToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",  // Ensure cookie is only sent over HTTPS in production
+        sameSite: "Strict",  // Optional: SameSite helps mitigate CSRF attacks
+        expires: new Date(Date.now() + 3600000),  // Optional: cookie expiration (1 hour)
+      });
+
+      // Send the token and a success message
+      return res.status(200).json({ userToken, message: "User logged in successfully." });
     } else {
-      return res.status(300).json({ message: "password incorrect" });
+      return res.status(401).json({ message: "Incorrect password." });  // Changed to 401 for incorrect password
     }
   } catch (error) {
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: "Internal server error.", error: error.message });
   }
 });
+
+
+
 
 const resendOTP = AsyncHandler(async (req, res) => {
   try {
     const { email, name } = req.body;
+    
+    // Log incoming request data
+    console.log("Received data:", req.body);
+
     const { data, error, token, otp } = await sendOtp(email, name);
-    const encryptedOtp = await bcrytp.hash(otp, salt);
+    
+    if (error) {
+      return res.status(400).json({ message: "Failed to send OTP", error: error });
+    }
+
+    const salt = await bcrypt.genSalt(10);  // Define salt for hashing
+    const encryptedOtp = await bcrypt.hash(otp, salt);
 
     const user = await loginSchema.findOne({ email });
-
-    if (error === null) {
-      return res.status(200).json({
-        message: "User created and OTP Send successfully",
-        userId: user._id,
-        otp: encryptedOtp,
-      });
-    } else {
-      return res
-        .status(200)
-        .json({ message: "User created but faild to send OTP", error: error });
+    
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    return res.status(200).json({
+      message: "User found and OTP sent successfully",
+      userId: user._id,
+      otp: encryptedOtp,
+    });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    // Log the error for debugging
+    console.error("Error:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
+
 
 
 const getCurrentUser = AsyncHandler(async (req, res) => {
@@ -145,8 +176,8 @@ const changeUserPassword = AsyncHandler(async (req, res) => {
         return res.status(400).json({message: "password is required"})
     }
     const {user} = req.user
-    const salt = await bcrytp.genSalt(10)
-    const hashedPassword = await bcrytp.hash(password, salt)
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
     const ack = await loginSchema.findByIdAndUpdate(user._id, {$set: {password: hashedPassword}})
     return res.status(200).json({ack,message:"password changed successfully"})
   } catch (error) {
