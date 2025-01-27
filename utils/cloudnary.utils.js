@@ -12,6 +12,7 @@ const uploadOnCloud = async (localFilePath) => {
     if (!localFilePath) return null;
     const response = await cloudnary.uploader.upload(localFilePath, {
       resource_type: "auto",
+      format: "png",
     });
     // console.log(response);
     // fs.unlinkSync(localFilePath);
@@ -20,7 +21,7 @@ const uploadOnCloud = async (localFilePath) => {
     // console.log(error);
 
     // fs.unlinkSync(localFilePath);
-    return null;
+    return error;
   }
 };
 

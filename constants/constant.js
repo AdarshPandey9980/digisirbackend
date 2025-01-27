@@ -72,3 +72,63 @@ export const OTP_EMAIL_HTML = (name,otp) => (`<!DOCTYPE html>
     </div>
 </body>
 </html>`)
+
+
+export const ACK_EMAIL_HTML = (instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key) => (
+    `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+    <div style="text-align: center;">
+      <img src=${logo} alt="Institute Logo" style="max-width: 100px; margin-bottom: 20px;" />
+    </div>
+    <h2 style="color: #333; text-align: center;">Welcome to Our Digisir Platform</h2>
+    <p style="font-size: 16px; color: #555; line-height: 1.6;">
+      Dear <b>${instituteName}</b>,
+    </p>
+    <p style="font-size: 16px; color: #555; line-height: 1.6;">
+      We are excited to have you join our platform! Below are the details of your registration:
+    </p>
+    <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Institute Name:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${instituteName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Email:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${email}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Contact Number:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${contact_number}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Address:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${address}</td>
+      </tr>
+    </table>
+    <p style="font-size: 14px; color: #555; line-height: 1.6;">
+      There are your keys for joining you students,teachers and parents to your platform
+    </p>
+    <table>
+    <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Student Key:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${student_key}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Teacher Key:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${teacher_key}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Parent Key:</td>
+        <td style="padding: 10px; border: 1px solid #ddd;">${parent_key}</td>
+      </tr>
+    </table>
+    <p style="font-size: 16px; color: #555; line-height: 1.6; margin-top: 20px;">
+      Please find the attached acknowledgment PDF for your payment. If you have any questions, feel free to contact us.
+    </p>
+    <p style="font-size: 16px; color: #555; line-height: 1.6;">
+      Thank you,<br />
+      <b>The digisir Team</b>
+    </p>
+  </div>
+    `
+)

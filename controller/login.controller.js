@@ -2,7 +2,6 @@ import loginSchema from "../models/login.model.js";
 import {
   AsyncHandler,
   sendOtp,
-  generateTokenforUser,
 } from "../utils/index.utils.js";
 import bcrytp from "bcryptjs";
 
@@ -132,7 +131,6 @@ const resendOTP = AsyncHandler(async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-
 
 const getCurrentUser = AsyncHandler(async (req, res) => {
   try {
