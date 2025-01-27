@@ -6,6 +6,15 @@ const InstituteAdminSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     contact_number: { type: String },
+    request: [
+      {
+        type: { type: String },
+        name:{type: String},
+        aadharCardNumber:{type: String},
+        email:{type: String},
+        created_at: { type: Date, default: Date.now }
+      }
+    ],
     students: [
       {
         student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
@@ -84,6 +93,9 @@ const InstituteAdminSchema = new mongoose.Schema({
     avatar: {
       type: String,
     },
+    paymentAck : {
+      type: String,
+    }
   });
 
   const InstituteAdmin = mongoose.model('InstituteAdmin', InstituteAdminSchema);

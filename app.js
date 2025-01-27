@@ -3,8 +3,11 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
 import loginRouter from "./router/login.routes.js"
-import paymentRoutes from './router/payment.route.js'
+import paymentRoutes from './router/payment.routes.js'
 import instituteAdminRoute from "./router/instituteAdmin.routes.js"
+import parentRoutes from "./router/parent.routes.js"
+import studentRoutes from "./router/student.routes.js"
+import teacherRoutes from "./router/teacher.routes.js"
 
 dotenv.config()
 
@@ -22,5 +25,8 @@ app.use(cors({
 app.use("/api/auth/tempLogin", loginRouter);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/instituteAdmin", instituteAdminRoute);
+app.use("/api/parent", parentRoutes);
+app.use("/api/student", studentRoutes);
+app.use("/api/teacher", teacherRoutes);
 
 export default app
