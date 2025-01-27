@@ -84,48 +84,24 @@ const loginUser = AsyncHandler(async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are both required." });
     }
-<<<<<<< HEAD
-
-    // Find the user by email
-    const user = await loginSchema.findOne({ email });
-    console.log(user)
-=======
     console.log(email, password);
     
     const user = await loginSchema.findOne({ email });
     console.log(user);
     
->>>>>>> 725c5cbac1eb602f44489a5c5211f652da5437c2
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });  // Changed to 404 for user not found
     }
 
-<<<<<<< HEAD
-    // Compare the password
     const verifyPassword = await bcrypt.compare(password, user.password);
-    console.log(verifyPassword)
-=======
-    const verifyPassword = await bcrytp.compare(password, user.password);
     console.log(verifyPassword);
     
 
->>>>>>> 725c5cbac1eb602f44489a5c5211f652da5437c2
     if (verifyPassword) {
-      // Generate a token for the user
-      const userToken = await generateTokenforUser(user);
-      console.log(userToken)
-
-      // Set the token in a cookie, making sure it's secure only in production
-      res.cookie("userToken", userToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",  // Ensure cookie is only sent over HTTPS in production
-        sameSite: "Strict",  // Optional: SameSite helps mitigate CSRF attacks
-        expires: new Date(Date.now() + 3600000),  // Optional: cookie expiration (1 hour)
-      });
-
-      // Send the token and a success message
-      return res.status(200).json({ userToken, message: "User logged in successfully." });
+      // const userToken = await generateTokenforUser(user);
+      //res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
+      return res.status(200).json({ userId: user._id,message: "user log in successfully" });
     } else {
       return res.status(401).json({ message: "Incorrect password." });  // Changed to 401 for incorrect password
     }
@@ -176,7 +152,11 @@ const resendOTP = AsyncHandler(async (req, res) => {
 
 const getCurrentUser = AsyncHandler(async (req, res) => {
   try {
-    const user = req.user;
+   const {userId} = req.body
+   if(!userId) {
+    return res.status(400).json({message:"user id is required"})
+   }
+   const user = await loginSchema.findById(userId)
     return res.status(200).json({ user, message:"user fetched succeessfully" });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -187,13 +167,19 @@ const changeUserPassword = AsyncHandler(async (req, res) => {
 
   try {
     const {password} = req.body
+    console.log(password)
     if(!password) {
         return res.status(400).json({message: "password is required"})
     }
-    const {user} = req.user
+    const {userId} = req.body
+    console.log(userId)
+    if(!userId) {
+        return res.status(400).json({message:"user id is required"})
+    }
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
-    const ack = await loginSchema.findByIdAndUpdate(user._id, {$set: {password: hashedPassword}})
+    console.log(hashedPassword)
+    const ack = await loginSchema.findByIdAndUpdate(userId, {$set: {password: hashedPassword}})
     return res.status(200).json({ack,message:"password changed successfully"})
   } catch (error) {
     return res.status(500).json({ message: error });
