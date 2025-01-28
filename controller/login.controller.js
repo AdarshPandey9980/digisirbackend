@@ -138,7 +138,7 @@ const getCurrentUser = AsyncHandler(async (req, res) => {
    if(!userId) {
     return res.status(400).json({message:"user id is required"})
    }
-   const user = await loginSchema.findById(userId)
+   const user = await loginSchema.findById(userId).select("-password ")
     return res.status(200).json({ user, message:"user fetched succeessfully" });
   } catch (error) {
     return res.status(500).json({ message: error });

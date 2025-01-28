@@ -46,7 +46,7 @@ const registerStudent = AsyncHandler(async (req, res) => {
   
         fs.unlinkSync(avatarLocalPath)
 
-        const user = await studentModel.create({
+        const user = await teacherModel.create({
             name,
             address,
             password: hashedPassword,
@@ -56,7 +56,7 @@ const registerStudent = AsyncHandler(async (req, res) => {
             email
         })
 
-       return res.status(200).json({user,message:"student created successfully"})
+       return res.status(200).json({user,message:"teacher created successfully"})
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -72,7 +72,7 @@ const loginUser = AsyncHandler(async (req, res) => {
       }
       console.log(email, password);
       
-      const user = await studentModel.findOne({ email });
+      const user = await teacherModel.findOne({ email });
       console.log(user);
       
   
@@ -87,7 +87,7 @@ const loginUser = AsyncHandler(async (req, res) => {
       if (verifyPassword) {
         // const userToken = await generateTokenforUser(user);
         //res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
-        return res.status(200).json({ userId: user._id,message: "user log in successfully" });
+        return res.status(200).json({ userId: user._id,message: "teacher log in successfully" });
       } else {
         return res.status(300).json({ message: "password incorrect" });
       }
@@ -108,9 +108,9 @@ const joinInstitute = AsyncHandler(async (req, res) => {
         return res.status(300).json({message:"institute not found"})
        }
 
-       const user = await studentModel.findById(userId)
+       const user = await teacherModel.findById(userId)
 
-       const result = await instituteAdminSchema.findByIdAndUpdate(_id,{$push:{request:[{type:"student",name:user.name,aadharCardNumber:user.aadharCardNumber,email:user.email}],}})
+       const result = await instituteAdminSchema.findByIdAndUpdate(_id,{$push:{request:[{type:"teacher",name:user.name,aadharCardNumber:user.aadharCardNumber,email:user.email}],}})
        
        return res.status(200).json({result})
     } catch (error) {
