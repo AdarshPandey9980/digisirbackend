@@ -17,20 +17,20 @@ const InstituteAdminSchema = new mongoose.Schema({
     ],
     students: [
       {
-        student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
+        student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student',unique: true },
         name: { type: String },
         roll_number: { type: String }
       }
     ],
     teachers: [
       {
-        teacher_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+        teacher_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher',unique: true },
         name: { type: String }
       }
     ],
     parents: [
       {
-        parent_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent' },
+        parent_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent',unique: true },
         name: { type: String }
       }
     ],
