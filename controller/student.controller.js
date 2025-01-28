@@ -14,6 +14,7 @@ import {
   import studentModel from "../models/student.model.js";
   import teacherModel from "../models/teacher.model.js";
   import lectureModel from "../models/lecture.model.js";
+import InstituteAdmin from "../models/instituteadmin.model.js";
   
 const registerStudent = AsyncHandler(async (req, res) => {
     try {
@@ -119,16 +120,27 @@ const joinInstitute = AsyncHandler(async (req, res) => {
     }
 })
 
-const getAllStudents = AsyncHandler(async(req,res) => {
-    try {
-        const result = await studentModel.find()
-        return res.status(200).json({result})
-    } catch (error) {
-        return res.status(500).json({message:
-            error
-        })
-    }
-})
+const getAllStudents = AsyncHandler(async (req, res) => {
+  const { instituteId } = req.body;
+
+  if (!instituteId) {
+      return res.status(400).json({ message: "Institute ID is required." });
+  }
+
+  try {
+      // Find all students associated with the given instituteId
+      const institute = await instituteAdminSchema.findById(instituteId).populate('students');
+
+      if (!institute) {
+          return res.status(404).json({ message: "Institute not found." });
+      }
+      console.log(institute.students);
+      return res.status(200).json({ result: institute.students });
+  } catch (error) {
+      return res.status(500).json({ message: error.message });
+  }
+});
+
 
 const getStudentLectures = AsyncHandler(async(req,res) => {
     try {
@@ -144,5 +156,74 @@ const getStudentLectures = AsyncHandler(async(req,res) => {
     }
 })
 
+const checkApprovalStatus = async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Find the student by userId
+      const student = await studentModel.findOne({ _id: userId });
+  
+      if (!student) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+  
+      // Debugging Logs
+      console.log("Student Found:", student);
+      console.log("isApproved:", student.isApproverd);
+      console.log("current_institute:", student.current_institute);
+      const instituteId = student.current_institute
+  
+      // Check if the student's request is approved
+      if (student.isApproverd) {
+        // Fetch the institute details using the current_institute field (instituteId)
+        const institute = await instituteAdminSchema.findById(instituteId); // Use findById for MongoDB
+        console.log(institute)
+        if (institute) {
+          return res.status(200).json({
+            status: 'approved',
+            instituteId: institute._id,
+            instituteName: institute.name,
+            instituteDescription: institute.description, // Include other details here as needed
+          });
+        } else {
+          return res.status(404).json({ message: 'Institute not found' });
+        }
+      } else {
+        return res.status(200).json({ status: 'pending' });
+      }
+    } catch (error) {
+      console.error("Error checking approval status:", error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
 
-export {registerStudent,loginUser,joinInstitute,getAllStudents,getStudentLectures}
+
+// Controller to fetch institute details by instituteId
+const getInstituteDetails = async (req, res) => {
+    const { instituteId } = req.params;
+  
+    try {
+      // Fetch the institute by instituteId using Mongoose's findById
+      const institute = await instituteAdminSchema.findById(instituteId);
+  
+      if (!institute) {
+        return res.status(404).json({ message: 'Institute not found' });
+      }
+  
+      // Return institute details
+      return res.status(200).json({
+        instituteId: institute._id,
+        instituteName: institute.institute_name,
+        instituteLocation: institute.address,
+        instituteContact: institute.contact_number,
+        instituteEmail:institute.email // Include other relevant fields here
+      });
+    } catch (error) {
+      console.error("Error fetching institute details:", error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+    
+
+export {registerStudent,loginUser,joinInstitute,getAllStudents,getStudentLectures,checkApprovalStatus,getInstituteDetails}
