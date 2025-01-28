@@ -13,6 +13,7 @@ import {sendAck} from "../utils/resentEmailService.utils.js"
 import parentModel from "../models/parent.model.js";
 import studentModel from "../models/student.model.js";
 import teacherModel from "../models/teacher.model.js";
+import lectureModel from "../models/lecture.model.js";
 
 const registerInstituteAdmin = AsyncHandler(async (req, res) => {
     try {
@@ -244,4 +245,34 @@ const aproveParentRequest = AsyncHandler(async(req,res) => {
     }
 })
 
-export {registerInstituteAdmin,getMemberBykey,getRequest,aproveStudentRequest,loginUser,aproveTeacherRequest,aproveParentRequest}
+const updateStudentInfo = AsyncHandler(async(req,res) => {
+    try {
+        
+    } catch (error) {
+        return res.status(500).json({message:
+            error
+        })
+    }
+})
+
+const addLectureSchedule = AsyncHandler(async(req,res) => {
+    try {
+        const { teacherId, subject, date, time, duration, studentIds } = req.body;
+    
+        const newLecture = new lectureModel({
+          teacherId,
+          subject,
+          date,
+          time,
+          duration,
+          studentIds,
+        });
+    
+        await lectureModel.save();
+        res.status(201).json({ message: 'Lecture scheduled successfully', lecture: newLecture });
+      } catch (error) {
+        res.status(500).json({ message: 'Error scheduling lecture', error: error.message });
+      }
+})
+
+export {registerInstituteAdmin,getMemberBykey,getRequest,aproveStudentRequest,loginUser,aproveTeacherRequest,aproveParentRequest,updateStudentInfo}

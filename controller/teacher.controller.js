@@ -118,6 +118,17 @@ const joinInstitute = AsyncHandler(async (req, res) => {
     }
 })
 
+const getAllTeachers = AsyncHandler(async(req,res) => {
+    try {
+        const result = await teacherModel.find()
+        return res.status(200).json({result})
+    } catch (error) {
+        return res.status(500).json({message:
+            error
+        })
+    }
+})
 
 
-export {registerStudent,loginUser,joinInstitute}
+
+export {registerStudent,loginUser,joinInstitute,getAllTeachers}
