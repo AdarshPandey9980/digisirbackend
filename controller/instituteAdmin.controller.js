@@ -267,12 +267,15 @@ const addLectureSchedule = AsyncHandler(async(req,res) => {
           duration,
           studentIds,
         });
+
+        console.log(newLecture);
+        
     
-        await lectureModel.save();
+        await newLecture.save();
         res.status(201).json({ message: 'Lecture scheduled successfully', lecture: newLecture });
       } catch (error) {
         res.status(500).json({ message: 'Error scheduling lecture', error: error.message });
       }
 })
 
-export {registerInstituteAdmin,getMemberBykey,getRequest,aproveStudentRequest,loginUser,aproveTeacherRequest,aproveParentRequest,updateStudentInfo}
+export {registerInstituteAdmin,getMemberBykey,getRequest,aproveStudentRequest,loginUser,aproveTeacherRequest,aproveParentRequest,addLectureSchedule}

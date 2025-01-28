@@ -13,7 +13,8 @@ import {
   import parentModel from "../models/parent.model.js";
   import studentModel from "../models/student.model.js";
   import teacherModel from "../models/teacher.model.js";
-  
+  import lectureModel from "../models/lecture.model.js";
+
 const registerStudent = AsyncHandler(async (req, res) => {
     try {
         const {email} = req.body
@@ -129,6 +130,18 @@ const getAllTeachers = AsyncHandler(async(req,res) => {
     }
 })
 
+const getTeacherLectures = AsyncHandler(async(req,res) => {
+    try {
+      const { teacherId } = req.params;
 
+      const lectures = await lectureModel.find({ teacherId }).populate('studentIds', 'name email');
+  
+      res.status(200).json({ lectures });
+    } catch (error) {
+        return res.status(500).json({message:
+            error
+        })
+    }
+})
 
-export {registerStudent,loginUser,joinInstitute,getAllTeachers}
+export {registerStudent,loginUser,joinInstitute,getAllTeachers,getTeacherLectures}
