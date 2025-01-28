@@ -7,3 +7,17 @@ API DOCUMENTATION
 3) https://api.test.hellodigisir.in/api/auth/tempLogin/resendotp ---> POST REQUEST ---> {name,email}
 
 4) https://api.test.hellodigisir.in/api/auth/tempLogin/login ---> POST REQUEST ---> {email,password}
+
+
+
+PORT=8000
+MONGODB_URL="mongodb+srv://root:root@digisir.1nsjf.mongodb.net/?retryWrites=true&w=majority&appName=digisir"
+JWT_SECRET = "487e7cdeea977ae6d267fbb5d638514b564e31bfe4c9b9f1ee465a5494a8dd37"
+RESEND_API_KEY="re_bwVFJkC1_A54hb36zAeJeCKjkhngPgzQv"
+# MONGODB_URL="mongodb://127.0.0.1:27017"
+RAZORPAY_KEY_ID="rzp_test_aD6aJqqrHMKaY5"
+RAZORPAY_KEY_SECRET="s7u4n25E5vNmxOHYyJQrYS2d"
+CLOUDNARY_NAME="dfkpnyypz"
+CLOUDNARY_API_KEY="926151823444856"
+CLOUDNARY_API_SECRET="G8Q5F-IlLYdsTzovN_H8oUoWPbM"
+CLOUDNARY_ENVIRONMENT_VARIABLE="CLOUDINARY_URL=cloudinary://926151823444856:G8Q5F-IlLYdsTzovN_H8oUoWPbM@dfkpnyypz"
