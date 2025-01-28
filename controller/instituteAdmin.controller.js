@@ -127,9 +127,10 @@ const loginUser = AsyncHandler(async (req, res) => {
     }
 });
 
-const addMembers = AsyncHandler(async(req,res) => {
+const getMemberBykey = AsyncHandler(async(req,res) => {
     try {
         const {key} = req.body
+        
         if (!key) {
             return res.status(300).json({message:"Joining key not found"})
         }
@@ -168,7 +169,7 @@ const getRequest = AsyncHandler(async(req,res) => {
     }
 })
 
-const aproveRequest = AsyncHandler(async(req,res) => {
+const aproveStudentRequest = AsyncHandler(async(req,res) => {
     try {
         const {studentEmail,userId} = req.body 
         if (!studentEmail) {
@@ -193,4 +194,54 @@ const aproveRequest = AsyncHandler(async(req,res) => {
     }
 })
 
-export {registerInstituteAdmin,addMembers,getRequest,aproveRequest,loginUser}
+const aproveTeacherRequest = AsyncHandler(async(req,res) => {
+    try {
+        const {teacherEmail,userId} = req.body 
+        if (!teacherEmail) {
+            return res.status(300).json({message:"Teacher email is required"})
+        }
+        const teacher = await teacherModel.findOne({email:teacherEmail})
+        if (!teacher) {
+            return res.status(300).json({message:"Teacher not found"})
+        }
+
+        await instituteAdminSchema.findByIdAndUpdate(userId,{$push:{teachers:[{teacher_id:teacher._id,name:teacher.name}]}})
+
+        await teacherModel.findByIdAndUpdate(teacher._id,{$set:{current_institute:userId, isApproverd:true}})
+
+        await instituteAdminSchema.findByIdAndUpdate(userId,{$pull:{request:{email:teacherEmail}},})
+
+        return res.status(200).json({message:"Teacher added successfully"})
+    } catch (error) {
+       return res.status(500).json({message:
+            error
+        }) 
+    }
+})
+
+const aproveParentRequest = AsyncHandler(async(req,res) => {
+    try {
+        const {parentEmail,userId} = req.body 
+        if (!parentEmail) {
+            return res.status(300).json({message:"parent email is required"})
+        }
+        const parent = await parentModel.findOne({email:parentEmail})
+        if (!parent) {
+            return res.status(300).json({message:"parent not found"})
+        }
+
+        await instituteAdminSchema.findByIdAndUpdate(userId,{$push:{parents:[{parent_id:parent._id,name:parent.name}]}})
+
+        await parentModel.findByIdAndUpdate(parent._id,{$set:{current_institute:userId, isApproverd:true}})
+
+        await instituteAdminSchema.findByIdAndUpdate(userId,{$pull:{request:{email:parentEmail}},})
+
+        return res.status(200).json({message:"parent added successfully"})
+    } catch (error) {
+       return res.status(500).json({message:
+            error
+        }) 
+    }
+})
+
+export {registerInstituteAdmin,getMemberBykey,getRequest,aproveStudentRequest,loginUser,aproveTeacherRequest,aproveParentRequest}

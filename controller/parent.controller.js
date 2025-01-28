@@ -26,9 +26,9 @@ const registerStudent = AsyncHandler(async (req, res) => {
             return res.status(300).json({message:"user already exist"})
         }
 
-        const {name,address,password,contact_number,aadharCardNumber} = req.body
+        const {name,address,password,contact_number,aadharCardNumber,studentEmail} = req.body
 
-        if (!name || !address || !password || !contact_number || !aadharCardNumber) {
+        if (!name || !address || !password || !contact_number || !aadharCardNumber || !studentEmail) {
             return res.status(400).json({message:"all field are required"})
         }
 
@@ -46,17 +46,23 @@ const registerStudent = AsyncHandler(async (req, res) => {
   
         fs.unlinkSync(avatarLocalPath)
 
-        const user = await studentModel.create({
+        const user = await parentModel.create({
             name,
             address,
             password: hashedPassword,
             contact_number,
             aadharCardNumber: hashedAadharCardNumber,
             avatar: avatar.url,
-            email
+            email,
+            children:[
+                {
+                    name,
+                    email:studentEmail
+                }
+            ]
         })
 
-       return res.status(200).json({user,message:"student created successfully"})
+       return res.status(200).json({user,message:"Parent created successfully"})
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -72,7 +78,7 @@ const loginUser = AsyncHandler(async (req, res) => {
       }
       console.log(email, password);
       
-      const user = await studentModel.findOne({ email });
+      const user = await parentModel.findOne({ email });
       console.log(user);
       
   
@@ -87,7 +93,7 @@ const loginUser = AsyncHandler(async (req, res) => {
       if (verifyPassword) {
         // const userToken = await generateTokenforUser(user);
         //res.cookie("userToken", userToken, { httpOnly: true, Scure: true });
-        return res.status(200).json({ userId: user._id,message: "user log in successfully" });
+        return res.status(200).json({ userId: user._id,message: "parent log in successfully" });
       } else {
         return res.status(300).json({ message: "password incorrect" });
       }
@@ -108,9 +114,9 @@ const joinInstitute = AsyncHandler(async (req, res) => {
         return res.status(300).json({message:"institute not found"})
        }
 
-       const user = await studentModel.findById(userId)
+       const user = await parentModel.findById(userId)
 
-       const result = await instituteAdminSchema.findByIdAndUpdate(_id,{$push:{request:[{type:"student",name:user.name,aadharCardNumber:user.aadharCardNumber,email:user.email}],}})
+       const result = await instituteAdminSchema.findByIdAndUpdate(_id,{$push:{request:[{type:"parent",name:user.name,aadharCardNumber:user.aadharCardNumber,email:user.email}],}})
        
        return res.status(200).json({result})
     } catch (error) {
