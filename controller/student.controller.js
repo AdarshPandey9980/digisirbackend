@@ -134,7 +134,6 @@ const getAllStudents = AsyncHandler(async (req, res) => {
       if (!institute) {
           return res.status(404).json({ message: "Institute not found." });
       }
-      console.log(institute.students);
       return res.status(200).json({ result: institute.students });
   } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -224,6 +223,29 @@ const getInstituteDetails = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+
+  const getStudentById = AsyncHandler(async (req, res) => {
+    // Get studentId from params or body
+    const studentId = req.params.studentId;
+    console.log(studentId);
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID is required." });
+    }
+  
+    try {
+      // Find student by ID and select required fields
+      const student = await studentModel.findById(studentId).select('name avatar email address contact_number');
+  
+      if (!student) {
+        return res.status(404).json({ message: "Student not found." });
+      }
+  
+      return res.status(200).json({ result: student });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
     
 
-export {registerStudent,loginUser,joinInstitute,getAllStudents,getStudentLectures,checkApprovalStatus,getInstituteDetails}
+export {registerStudent,loginUser,joinInstitute,getAllStudents,getStudentLectures,checkApprovalStatus,getInstituteDetails,getStudentById}

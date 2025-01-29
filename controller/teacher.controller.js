@@ -144,4 +144,54 @@ const getTeacherLectures = AsyncHandler(async(req,res) => {
     }
 })
 
-export {registerStudent,loginUser,joinInstitute,getAllTeachers,getTeacherLectures}
+
+// Controller to fetch institute details by instituteId
+const getInstituteDetails = async (req, res) => {
+    const { instituteId } = req.params;
+  
+    try {
+      // Fetch the institute by instituteId using Mongoose's findById
+      const institute = await instituteAdminSchema.findById(instituteId);
+  
+      if (!institute) {
+        return res.status(404).json({ message: 'Institute not found' });
+      }
+  
+      // Return institute details
+      return res.status(200).json({
+        instituteId: institute._id,
+        instituteName: institute.institute_name,
+        instituteLocation: institute.address,
+        instituteContact: institute.contact_number,
+        instituteEmail:institute.email // Include other relevant fields here
+      });
+    } catch (error) {
+      console.error("Error fetching institute details:", error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+  const getTeacherById = AsyncHandler(async (req, res) => {
+    // Get studentId from params or body
+    const studentId = req.params.studentId;
+    console.log(studentId);
+    if (!studentId) {
+      return res.status(400).json({ message: "Student ID is required." });
+    }
+  
+    try {
+      // Find student by ID and select required fields
+      const student = await teacherModel.findById(studentId).select('name avatar email address contact_number');
+  
+      if (!student) {
+        return res.status(404).json({ message: "Student not found." });
+      }
+  
+      return res.status(200).json({ result: student });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
+
+
+export {registerStudent,loginUser,joinInstitute,getAllTeachers,getTeacherLectures,getInstituteDetails,getTeacherById}
