@@ -1,0 +1,21 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "y",
+  "main": "index.js",
+  
+  "scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "otp-generator": "^4.0.1",
+    "twilio": "^5.4.2"
+  }
+}
