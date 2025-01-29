@@ -196,8 +196,6 @@ const checkApprovalStatus = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-  
-
 
 // Controller to fetch institute details by instituteId
 const getInstituteDetails = async (req, res) => {
@@ -224,6 +222,206 @@ const getInstituteDetails = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+
+  // Update class_detail
+  export const updateClassDetail = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { standard, section, division } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $set: { 'class_detail': { standard, section, division } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Class details updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating class details', error: error.message });
+      }
+  };
+  
+  // Update attendance
+  export const updateAttendance = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { date, status } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { attendance: { date, status } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Attendance updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating attendance', error: error.message });
+      }
+  };
+  
+  // Update performance (tests)
+  export const updatePerformanceTests = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { test_id, marks, total_marks, test_date } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { 'performance.tests': { test_id, marks, total_marks, test_date } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Performance tests updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating performance tests', error: error.message });
+      }
+  };
+  
+  // Update progress_reports
+  export const updateProgressReports = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { chapter, score } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { 'performance.progress_reports': { chapter, score } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Progress reports updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating progress reports', error: error.message });
+      }
+  };
+  
+  // Update enrollment
+  export const updateEnrollment = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { admission_date, status } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $set: { enrollment: { admission_date, status } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Enrollment updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating enrollment', error: error.message });
+      }
+  };
+  
+  // Update notes
+  export const updateNotes = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { title, content, is_paid } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { notes: { title, content, is_paid } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Notes updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating notes', error: error.message });
+      }
+  };
+  
+  // Update test_history
+  export const updateTestHistory = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { test_id, marks, remarks } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { test_history: { test_id, marks, remarks } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Test history updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating test history', error: error.message });
+      }
+  };
+  
+  // Update institute_history
+  export const updateInstituteHistory = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { instituteId } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { institute_history: { instituteId } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Institute history updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating institute history', error: error.message });
+      }
+  };
+  
+  // Update remarks
+  export const updateRemarks = async (req, res) => {
+      try {
+          const { studentId } = req.params;
+          const { instituteId, remark } = req.body;
+  
+          const updatedStudent = await studentModel.findByIdAndUpdate(
+              studentId,
+              { $push: { remarks: { instituteId, remark } } },
+              { new: true }
+          );
+  
+          if (!updatedStudent) {
+              return res.status(404).json({ message: 'Student not found' });
+          }
+  
+          res.status(200).json({ message: 'Remarks updated successfully', data: updatedStudent });
+      } catch (error) {
+          res.status(500).json({ message: 'Error updating remarks', error: error.message });
+      }
+  };
+
     
 
 export {registerStudent,loginUser,joinInstitute,getAllStudents,getStudentLectures,checkApprovalStatus,getInstituteDetails}

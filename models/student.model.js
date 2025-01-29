@@ -12,9 +12,9 @@ const StudentSchema = new mongoose.Schema({
     parent_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent' },
     class_detail: {
       standard: { type: String },
-      section: { type: String }
+      section: { type: String },
+      division: { type: String },
     },
-    division: { type: String },
     attendance: [
       {
         date: { type: Date },
@@ -37,13 +37,6 @@ const StudentSchema = new mongoose.Schema({
         }
       ]
     },
-    emergency_alerts: [
-      {
-        type: { type: String },
-        date: { type: Date },
-        status: { type: String }
-      }
-    ],
     enrollment: {
       admission_date: { type: Date },
       status: { type: String }

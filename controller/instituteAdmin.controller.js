@@ -69,7 +69,7 @@ const registerInstituteAdmin = AsyncHandler(async (req, res) => {
 
         const getPaymentInfo = await paymentModel.findOne({email})
 
-        const pdf = generatePaymentPDF(getPaymentInfo)
+        const pdf =  generatePaymentPDF(getPaymentInfo)
         console.log(pdf);
         
         const pdfCloud = await uploadOnCloud(pdf)
@@ -242,16 +242,6 @@ const aproveParentRequest = AsyncHandler(async(req,res) => {
        return res.status(500).json({message:
             error
         }) 
-    }
-})
-
-const updateStudentInfo = AsyncHandler(async(req,res) => {
-    try {
-        
-    } catch (error) {
-        return res.status(500).json({message:
-            error
-        })
     }
 })
 
