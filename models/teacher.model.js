@@ -21,10 +21,7 @@ const TeacherSchema = new mongoose.Schema({
     ],
     timetable: [
       {
-        day: { type: String },
-        time: { type: String },
-        class_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
-        subject: { type: String }
+        lecute: { type: mongoose.Schema.Types.ObjectId, ref: 'Lecture' },
       }
     ],
     test_paper_generator: [

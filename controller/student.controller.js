@@ -195,8 +195,6 @@ const checkApprovalStatus = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-  
-
 
 // Controller to fetch institute details by instituteId
 const getInstituteDetails = async (req, res) => {
