@@ -17,34 +17,6 @@ const ParentSchema = new mongoose.Schema({
         class_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' }
       }
     ],
-    notifications: [
-      {
-        message: { type: String },
-        date: { type: Date }
-      }
-    ],
-    attendance_updates: [
-      {
-        student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-        date: { type: Date },
-        status: { type: String }
-      }
-    ],
-    fees_reminders: [
-      {
-        student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-        amount_due: { type: Number },
-        due_date: { type: Date }
-      }
-    ],
-    test_reports: [
-      {
-        student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-        test_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Test' },
-        marks: { type: Number },
-        remarks: { type: String }
-      }
-    ],
     current_institute: {
       institute_id: { type: mongoose.Schema.Types.ObjectId, ref: 'InstituteAdmin' },
     },

@@ -13,7 +13,7 @@ import {sendAck} from "../utils/resentEmailService.utils.js"
 import parentModel from "../models/parent.model.js";
 import studentModel from "../models/student.model.js";
 import teacherModel from "../models/teacher.model.js";
-import lectureModel from "../models/lecture.model.js";
+// import lectureModel from "../models/lecture.model.js";
 
 const registerInstituteAdmin = AsyncHandler(async (req, res) => {
     try {
@@ -249,14 +249,14 @@ const addLectureSchedule = AsyncHandler(async(req,res) => {
     try {
         const { teacherId, subject, date, time, duration, studentIds } = req.body;
     
-        const newLecture = new lectureModel({
-          teacherId,
-          subject,
-          date,
-          time,
-          duration,
-          studentIds,
-        });
+        // const newLecture = new lectureModel({
+        //   teacherId,
+        //   subject,
+        //   date,
+        //   time,
+        //   duration,
+        //   studentIds,
+        // });
 
         console.log(newLecture);
         

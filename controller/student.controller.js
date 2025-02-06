@@ -13,7 +13,7 @@ import {
   import parentModel from "../models/parent.model.js";
   import studentModel from "../models/student.model.js";
   import teacherModel from "../models/teacher.model.js";
-  import lectureModel from "../models/lecture.model.js";
+//   import lectureModel from "../models/lecture.model.js";
 import InstituteAdmin from "../models/instituteadmin.model.js";
   
 const registerStudent = AsyncHandler(async (req, res) => {
@@ -146,7 +146,7 @@ const getStudentLectures = AsyncHandler(async(req,res) => {
     try {
       const { studentId } = req.params;
 
-      const lectures = await lectureModel.find({ studentIds: studentId }).populate('teacherId', 'name email');
+    //   const lectures = await lectureModel.find({ studentIds: studentId }).populate('teacherId', 'name email');
   
       res.status(200).json({ lectures }); 
     } catch (error) {
@@ -222,7 +222,6 @@ const getInstituteDetails = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-
 
   // Update class_detail
   export const updateClassDetail = async (req, res) => {

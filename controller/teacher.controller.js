@@ -13,7 +13,8 @@ import {
   import parentModel from "../models/parent.model.js";
   import studentModel from "../models/student.model.js";
   import teacherModel from "../models/teacher.model.js";
-  import lectureModel from "../models/lecture.model.js";
+//   import lectureModel from "../models/lecture.model.js";
+//   import testModel from '../models/test.model.js';
 
 const registerStudent = AsyncHandler(async (req, res) => {
     try {
@@ -134,7 +135,7 @@ const getTeacherLectures = AsyncHandler(async(req,res) => {
     try {
       const { teacherId } = req.params;
 
-      const lectures = await lectureModel.find({ teacherId }).populate('studentIds', 'name email');
+    //   const lectures = await lectureModel.find({ teacherId }).populate('studentIds', 'name email');
   
       res.status(200).json({ lectures });
     } catch (error) {
@@ -143,5 +144,144 @@ const getTeacherLectures = AsyncHandler(async(req,res) => {
         })
     }
 })
+
+export const updateSubjects = async (req, res) => {
+    const { teacherId } = req.params;
+    const { subjects } = req.body;
+
+    try {
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $set: { subjects: subjects } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(200).json(teacher);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateClasses = async (req, res) => {
+    const { teacherId } = req.params;
+    const { classes } = req.body;
+
+    try {
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $set: { classes: classes } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(200).json(teacher);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateAttendance = async (req, res) => {
+    const { teacherId } = req.params;
+    const { attendance } = req.body;
+
+    try {
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $push: { attendance: attendance } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(200).json(teacher);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateNotices = async (req, res) => {
+    const { teacherId } = req.params;
+    const { notices } = req.body;
+
+    try {
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $push: { notices: notices } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(200).json(teacher);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updatePerformanceReports = async (req, res) => {
+    const { teacherId } = req.params;
+    const { performance_reports } = req.body;
+
+    try {
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $push: { performance_reports: performance_reports } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(200).json(teacher);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const generateTestPaper = async (req, res) => {
+    const { teacherId, classId, title, questions, duration, syllabus, max_marks } = req.body;
+
+    try {
+        // const test = new testModel({
+        //     title,
+        //     teacher_id: teacherId,
+        //     class_id: classId,
+        //     questions,
+        //     duration,
+        //     syllabus,
+        //     max_marks
+        // });
+
+        await test.save();
+
+        // Update the teacher's test_paper_generator array
+        const teacher = await teacherModel.findByIdAndUpdate(
+            teacherId,
+            { $push: { test_paper_generator: { test_id: test._id, test_type: "Generated", syllabus, date: new Date() } } },
+            { new: true }
+        );
+
+        if (!teacher) {
+            return res.status(404).json({ message: "Teacher not found" });
+        }
+
+        res.status(201).json(test);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export {registerStudent,loginUser,joinInstitute,getAllTeachers,getTeacherLectures}

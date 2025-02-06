@@ -8,13 +8,7 @@ const generateOtp = () => {
 
 const sendOtp = async (email,name) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
-
-//   resend.domains.verify('0af90700-4f3e-441d-ae64-cc8cfcb5ec9d');
-
     const otp = generateOtp();
-    const expiry = Date.now() + 5 * 60 * 1000; 
-
-    const token = await generateTokenForOtp(otp,expiry)
 
     try {
         const { data, error } = await resend.emails.send({
@@ -23,14 +17,14 @@ const sendOtp = async (email,name) => {
             subject: "Verification OTP",
             html: OTP_EMAIL_HTML(name,otp),
           });
-
-          return {data,error,token,otp}
+          
+          return {data,error,otp}
     } catch (error) {
         return { success: false, message: 'Failed to send OTP.' };
     }
 }
 
-const sendAck = async (instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key,pdfPath) => {
+const sendAck = async (instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
     
     try {
@@ -38,36 +32,7 @@ const sendAck = async (instituteName,email,contact_number,address,logo,student_k
             from: "DigiSir <noreply@hellodigisir.in>",
             to: [`${email}`],
             subject: "Payment Acknowledgement",
-            html: ACK_EMAIL_HTML(instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key),
-            attachments: [
-                {
-                    filename: 'payment-receipt.png',
-                    path: pdfPath, // Path to the generated PDF
-                },
-            ]
-          });
-
-          return {data,error}
-    } catch (error) {
-        return { success: false, message: 'Failed to send OTP.' };
-    }
-}
-
-const sendAckToMembers = async (instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key,pdfPath) => {
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    
-    try {
-        const { data, error } = await resend.emails.send({
-            from: "DigiSir <noreply@hellodigisir.in>",
-            to: [`${email}`],
-            subject: "Payment Acknowledgement",
-            html: ACK_EMAIL_HTML(instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key),
-            attachments: [
-                {
-                    filename: 'payment-receipt.png',
-                    path: pdfPath, // Path to the generated PDF
-                },
-            ]
+            html: ACK_EMAIL_HTML(instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key)
           });
 
           return {data,error}
@@ -78,4 +43,5 @@ const sendAckToMembers = async (instituteName,email,contact_number,address,logo,
 
 
 
-export {sendOtp,sendAck,sendAckToMembers}
+
+export {sendOtp,sendAck}

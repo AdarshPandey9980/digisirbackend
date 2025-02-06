@@ -2,12 +2,13 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
-import loginRouter from "./router/login.routes.js"
+// import loginRouter from "./router/login.routes.js"
 import paymentRoutes from './router/payment.routes.js'
 import instituteAdminRoute from "./router/instituteAdmin.routes.js"
 import parentRoutes from "./router/parent.routes.js"
 import studentRoutes from "./router/student.routes.js"
 import teacherRoutes from "./router/teacher.routes.js"
+import superAdmin from "./router/superAdmin.routes.js"
 
 dotenv.config()
 
@@ -22,11 +23,12 @@ app.use(cors({
     // origin: 'http://localhost:5173', // Vite's default dev server // Allowed methods
     credentials: true,              // Allow cookies
 }));
-app.use("/api/auth/tempLogin", loginRouter);
+// app.use("/api/auth/tempLogin", loginRouter);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/instituteAdmin", instituteAdminRoute);
 app.use("/api/parent", parentRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/superAdmin", superAdmin);
 
 export default app
