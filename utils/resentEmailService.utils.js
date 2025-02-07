@@ -1,5 +1,4 @@
 import { Resend } from 'resend';
-import {generateTokenForOtp} from "./index.utils.js"
 import {OTP_EMAIL_HTML,ACK_EMAIL_HTML} from "../constants/constant.js"
 
 const generateOtp = () => {

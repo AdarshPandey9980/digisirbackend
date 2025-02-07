@@ -1,4 +1,4 @@
-import {Schema, mongoose} from 'mongoose'
+import { Schema, mongoose } from "mongoose";
 
 const superAdminSchema = new Schema({
   name: { type: String, required: true },
@@ -6,28 +6,36 @@ const superAdminSchema = new Schema({
   password: { type: String, required: true },
   mobile_number: { type: String, required: true },
   avatar: { type: String },
-  institutes: [{ type: Schema.Types.ObjectId, ref: 'InstituteAdmin' }],
+  institutes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "InstituteAdmin",
+    },
+  ],
   requests: [
     {
       name: String,
       email: String,
       mobile_number: String,
       message: String,
-    }
+    },
   ],
-  // Payment record management for institutes
   institute_payments: [
     {
-      institute_id: { type: Schema.Types.ObjectId, ref: 'InstituteAdmin', required: true },
-      amount: { type: Number, required: true },
-      payment_method: { type: String, enum: ['offline', 'online'], required: true },
-      payment_date: { type: Date, default: Date.now }
-    }
+      institute_id: {
+        type: Schema.Types.ObjectId,
+        ref: "InstituteAdmin",
+      },
+      amount: { type: Number },
+      payment_method: {
+        type: String,
+        enum: ["offline", "online"],
+      },
+      payment_date: { type: Date, default: Date.now },
+    },
   ],
-  piticash: [{ amount: Number, description: String, date: Date }],
 });
 
+const SuperAdmin = mongoose.model("SuperAdmin", superAdminSchema);
 
-const SuperAdmin = mongoose.model('SuperAdmin', superAdminSchema);
-
-export default SuperAdmin
+export default SuperAdmin;

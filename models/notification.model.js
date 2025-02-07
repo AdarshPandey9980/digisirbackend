@@ -15,7 +15,6 @@ const notificationSchema = new Schema({
       ref: 'Parent'
     }
   ],
-  event_related: { type: Schema.Types.ObjectId, ref: 'Event' },
   created_at: { type: Date, default: Date.now }
 });
 

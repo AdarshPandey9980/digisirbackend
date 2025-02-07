@@ -1,6 +1,6 @@
-export const DB_NAME = "digisir"
+export const DB_NAME = "digisir";
 
-export const OTP_EMAIL_HTML = (name,otp) => (`<!DOCTYPE html>
+export const OTP_EMAIL_HTML = (name, otp) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -71,11 +71,19 @@ export const OTP_EMAIL_HTML = (name,otp) => (`<!DOCTYPE html>
         </div>
     </div>
 </body>
-</html>`)
+</html>`;
 
-
-export const ACK_EMAIL_HTML = (instituteName,email,contact_number,address,logo,student_key,teacher_key,parent_key) => (
-    `
+export const ACK_EMAIL_HTML = (
+  instituteName,
+  email,
+  contact_number,
+  address,
+  logo,
+  student_key,
+  teacher_key,
+  parent_key
+) =>
+  `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
     <div style="text-align: center;">
       <img src=${logo} alt="Institute Logo" style="max-width: 100px; margin-bottom: 20px;" />
@@ -130,5 +138,4 @@ export const ACK_EMAIL_HTML = (instituteName,email,contact_number,address,logo,s
       <b>The digisir Team</b>
     </p>
   </div>
-    `
-)
+    `;

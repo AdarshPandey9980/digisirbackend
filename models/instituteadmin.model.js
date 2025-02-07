@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const InstituteAdminSchema = new mongoose.Schema({
   institute_name: { type: String, required: true },
@@ -65,28 +65,37 @@ const InstituteAdminSchema = new mongoose.Schema({
   fees_record: [
     {
       student_id: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
+      totalAmount: { type: Number },
+      paidAmount: { type: Number },
       amount: Number,
       date: Date,
     },
   ],
   petty_cash: [{ amount: Number, description: String, date: Date }],
-  library: [{ book_name: String, author: String, is_borrowed: Boolean }],
+  library: [
+    {
+      book_name: String,
+      author: String,
+      is_borrowed: Boolean,
+      date: Date,
+      student_id: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
+    },
+  ],
   events: [{ title: String, description: String, date: Date }],
   teacher_salary: [
     {
       teacher_id: {
         type: Schema.Types.ObjectId,
         ref: "Teacher",
-        
       },
-      amount: { type: Number, },
+      amount: { type: Number },
       date: { type: Date, default: Date.now },
       paid: { type: Boolean, default: false },
     },
   ],
   expenses: [
     {
-      description: { type: String  },
+      description: { type: String },
       amount: { type: Number },
       date: { type: Date, default: Date.now },
     },
